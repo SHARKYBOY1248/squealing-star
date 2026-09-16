@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# backup of previous template, safe to delete
+.old-template-backup/
