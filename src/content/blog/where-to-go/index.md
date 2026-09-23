@@ -5,7 +5,8 @@ date: "2026-09-23"
 draft: false
 tags:
   - ml
-  - notes
+  - inference
+  - journey
 ---
 
 After working through transformer basics, I wanted to better understand what matters during inference in practice, not just in theory.

@@ -6,7 +6,6 @@ import FormattedDate from "@components/FormattedDate.astro";
 import { readingTime } from "@lib/utils";
 import BackToPrevious from "@components/BackToPrevious.astro";
 import PostNavigation from "@components/PostNavigation.astro";
-import TableOfContents from "@components/TableOfContents.astro";
 import Giscus from "@components/Giscus.astro";
 
 export async function getStaticPaths() {
@@ -48,7 +47,7 @@ const nextPost = getNextPost();
 const prevPost = getPrevPost();
 
 const post = Astro.props;
-const { Content, headings } = await render(post);
+const { Content } = await render(post);
 ---
 
 <Layout title={post.data.title} description={post.data.description}>
@@ -86,7 +85,6 @@ const { Content, headings } = await render(post);
         ) : null
       }
     </div>
-    {headings.length > 0 && <TableOfContents headings={headings} />}
     <article class="animate">
       <Content />
       <div class="mt-24">
