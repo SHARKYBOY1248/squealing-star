@@ -1,0 +1,71 @@
+<style>
+.b{border:2px solid;border-radius:10px;padding:10px 14px;text-align:center;background:var(--surface-2);color:var(--text-primary);flex:1;min-width:0}
+.t1{font-size:17px;font-weight:500;line-height:1.4}
+.t2{font-size:15px;color:var(--text-primary);opacity:.8;line-height:1.4}
+.w{border-color:#1D9E75}.k{border-color:#D85A30}.n{border-color:var(--border-stronger)}
+.row{display:flex;gap:12px;justify-content:center;align-items:stretch}
+.ar{display:flex;justify-content:center;color:var(--text-primary);padding:2px 0}
+.nar{max-width:220px;margin:0 auto}
+.loop{
+  border:3px dashed #64748b;
+  border-radius:16px;
+  padding:14px 16px 16px;
+  background:rgba(100,116,139,.08);
+  box-shadow:inset 0 0 0 1px rgba(100,116,139,.18);
+}
+.lg{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;font-size:15px;color:var(--text-primary);margin-bottom:10px}
+.sw{display:inline-block;width:16px;height:16px;border-radius:4px;border:2px solid;vertical-align:-3px;margin-right:6px}
+.loop-title{
+  font-size:18px;
+  font-weight:700;
+  color:var(--text-primary);
+  margin-bottom:10px;
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:999px;
+  border:2px solid #64748b;
+  background:rgba(100,116,139,.14);
+}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+</style>
+<h2 class="sr-only">Qwen2.5-7B per-token computation: embedding, 28 layers of RMSNorm, Q K V projections, KV cache, grouped-query attention, O projection, residual, RMSNorm, SwiGLU MLP, residual, then final norm and LM head.</h2>
+<div style="padding:.5rem 0">
+<div class="lg"><span><span class="sw" style="border-color:#1D9E75"></span>Weight matmul (shared by batch)</span><span><span class="sw" style="border-color:#D85A30"></span>Per-sequence (KV, attention)</span></div>
+<div class="b n" style="max-width:340px;margin:0 auto"><div class="t1">Embedding lookup</div><div class="t2">[152064 × 3584], only B rows read</div></div>
+<div class="ar"><svg width="20" height="30" viewBox="0 0 20 30" aria-hidden="true"><path d="M10 2V26M3 19L10 27L17 19" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="loop">
+<div class="loop-title">× 28 layers</div>
+<div class="b n nar"><div class="t1">RMSNorm</div></div>
+<div class="ar"><svg width="20" height="30" viewBox="0 0 20 30" aria-hidden="true"><path d="M10 2V26M3 19L10 27L17 19" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="row">
+<div class="b w"><div class="t1">Q proj</div><div class="t2">3584 → 28 heads × 128</div></div>
+<div class="b w"><div class="t1">K proj</div><div class="t2">3584 → 4 heads × 128</div></div>
+<div class="b w"><div class="t1">V proj</div><div class="t2">3584 → 4 heads × 128</div></div>
+</div>
+<div class="ar"><svg width="20" height="30" viewBox="0 0 20 30" aria-hidden="true"><path d="M10 2V26M3 19L10 27L17 19" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="row" style="align-items:center">
+<div class="b k"><div class="t1">Attention</div><div class="t2">28 q heads, 7 share each kv head</div></div>
+<div style="color:var(--text-primary);display:flex"><svg width="36" height="20" viewBox="0 0 36 20" aria-hidden="true"><path d="M3 10H33M9 4L3 10L9 16M27 4L33 10L27 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="b k"><div class="t1">KV cache (this sequence)</div><div class="t2">append new k, v · read all past</div></div>
+</div>
+<div class="ar"><svg width="20" height="30" viewBox="0 0 20 30" aria-hidden="true"><path d="M10 2V26M3 19L10 27L17 19" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="b w" style="max-width:300px;margin:0 auto"><div class="t1">O proj</div><div class="t2">concat 28 heads → 3584</div></div>
+<div class="ar"><svg width="20" height="30" viewBox="0 0 20 30" aria-hidden="true"><path d="M10 2V26M3 19L10 27L17 19" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="b n nar"><div class="t1">+ residual</div></div>
+<div class="ar"><svg width="20" height="30" viewBox="0 0 20 30" aria-hidden="true"><path d="M10 2V26M3 19L10 27L17 19" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="b n nar"><div class="t1">RMSNorm</div></div>
+<div class="ar"><svg width="20" height="30" viewBox="0 0 20 30" aria-hidden="true"><path d="M10 2V26M3 19L10 27L17 19" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="row" style="max-width:480px;margin:0 auto">
+<div class="b w"><div class="t1">Gate</div><div class="t2">3584 → 18944</div></div>
+<div class="b w"><div class="t1">Up</div><div class="t2">3584 → 18944</div></div>
+</div>
+<div class="ar"><svg width="20" height="30" viewBox="0 0 20 30" aria-hidden="true"><path d="M10 2V26M3 19L10 27L17 19" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="b n" style="max-width:260px;margin:0 auto"><div class="t1">SiLU(gate) ⊙ up</div><div class="t2">elementwise, 18944</div></div>
+<div class="ar"><svg width="20" height="30" viewBox="0 0 20 30" aria-hidden="true"><path d="M10 2V26M3 19L10 27L17 19" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="b w" style="max-width:260px;margin:0 auto"><div class="t1">Down</div><div class="t2">18944 → 3584</div></div>
+<div class="ar"><svg width="20" height="30" viewBox="0 0 20 30" aria-hidden="true"><path d="M10 2V26M3 19L10 27L17 19" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="b n nar"><div class="t1">+ residual</div></div>
+</div>
+<div class="ar"><svg width="20" height="30" viewBox="0 0 20 30" aria-hidden="true"><path d="M10 2V26M3 19L10 27L17 19" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="b w" style="max-width:340px;margin:0 auto"><div class="t1">Final RMSNorm + LM head</div><div class="t2">3584 → 152064 logits</div></div>
+</div>
