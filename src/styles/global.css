@@ -71,6 +71,10 @@
     @apply prose-headings:font-semibold;
     @apply prose-headings:text-black dark:prose-headings:text-white;
   }
+
+  article .katex-display {
+    @apply overflow-x-auto overflow-y-hidden py-1;
+  }
 }
 
 @layer utilities {
